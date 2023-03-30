@@ -1,0 +1,109 @@
+SuperPy usage guide
+
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+Om de Command line interface 'SuperPy' te gebruiken moeten er eerst een aantal dingen verhelderd worden:
+    - SuperPy bevat 3 csv-files:
+        - bought.csv
+        - sold.csv
+        - products.csv
+
+Bought.csv is een csv file wat als "inventaris" gezien kan worden. Als producten worden ingekocht dan komen ze hier in te staan. Elk product bevat een aantal soorten data: een id, de naam van het product, de inkoopprijs, het aantal identieke producten (dus ook de inkoopdatum), de inkoop datum, en het vervaldatum. Het vervaldatum wordt automatisch berekend op basis van het soort product (bijvoorbeeld: fruits, vegetables, snacks, etc.).
+
+sold.csv is een csv file waar alle producten die verkocht zijn worden opgeslagen. Deze file wordt gebruikt om bijvoorbeeld de winst en omzet te berekenen. Als je een product verkoopt dan worden de volgende data soorten geupdate/toegevoegd: een id, de bought_id (de id van het product toen hij in bought.csv stond), de naam van het product, het aantal verkochte identieke producten, het verkoopdatum, de verkoopprijs (de verkoopprijs wordt automatisch berekend door middel van een winstmarge (4%)).
+
+products.csv is een csv file waar alle mogelijke producten in staan om te kopen van de leverancier. In deze file wordt geen data uit gehaald/toegevoegd.
+
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+De superPy Command line interface heeft de volgende functionaliteiten:
+    1. Producten kopen (buy-products)
+    2. Producten verkopen (sell-products)
+    3. De omzet importeren (get-revenue)
+    4. De omzet importen op een grafiek (show-revenue)
+    5. De winst importeren (show-profit)
+    6. Het aantal identieke producten importeren (show-product-amount)
+    7. Alle data importeren over een specifiek product (show-product-inventory)
+    8. Alle verkochte producten importeren als een tabel (show-sold-products)
+    9. De datum wat als "vandaag" wordt gezien veranderen (advance-time)
+    10. Het hele inventaris (bought.csv) importeren als tabel (read-inventory)
+
+-----------------------------------------------------------------------------------------------------------------
+    
+buy-products is een functie die beschikbare producten inkoopt. Zodra de functie is uitgevoerd wordt er in bought.csv een nieuwe regel toegevoegd. Als hetzelfde product op die dag al is ingekocht wordt alleen de hoeveelheid aangepast in de al-bestaande regel. De functie heeft 2 argumenten nodig: de 'product' en de 'amount'.
+
+Voorbeeld: 
+INPUT: python main.py buy-products --amount 20 --product orange
+OUTPUT: "orange" has been bought & added to the inventory
+
+-----------------------------------------------------------------------------------------------------------------
+
+sell-products is een functie die producten verkoopt. Let op: sell-products kan alleen producten verkopen die al ingekocht zijn, anders verschijnt er een error. Ook kan de functie alleen producten verkopen die nog niet overdatum zijn. Zodra de functie is uitgevoerd dan wordt er een regel toegevoegd in sold.csv. Als een identiek product op dezelfde dag is verkocht dan wordt alleen de hoeveelheid aangepast in de al-bestaande regel. Na dat een product is verkocht wordt de hoeveelheid geupdate in de inventaris (als er 20 tomaten in het inventaris zitten en je verkoopt er 10 dan blijven er 10 over in de inventaris). De functie heeft 2 argumenten nodig: de 'product' en de 'amount'.
+
+Voorbeeld: 
+INPUT: python main.py sell-products --amount 10 --product orange
+OUTPUT: "orange" has been sold at the price of: "€8.3"
+
+-----------------------------------------------------------------------------------------------------------------
+
+get-revenue is een functie die de omzet, in de loop van een bepaald aantal dagen importeert (bijvoorbeeld: je wilt weten hoeveel omzet de winkel heeft gemaakt in de afgelopen 10 dagen). De functie heeft 1 argument nodig: de hoeveelheid afgelopen dagen waarvan je de omzet van wilt weten 'days'.
+
+Voorbeeld: 
+INPUT: python main.py get-revenue --days 10
+OUTPUT: The revenue over the last 10 days is "€5412.61"
+
+-----------------------------------------------------------------------------------------------------------------
+
+show-revenue is een functie die de omzet, in de loop van een bepaald aantal dagen importeert in de vorm van een grafiek (bijvoorbeeld: je wilt zien hoeveel omzet de winkel heeft gemaakt in de afgelopen 10 dagen). De functie heeft 1 argument nodig: de hoeveelheid afgelopen dagen waarvan je de omzet van wilt weten 'days'.
+
+Voorbeeld: 
+INPUT: python main.py show-revenue --days 10
+OUTPUT: Een grafiek met de omzet per dag.
+
+-----------------------------------------------------------------------------------------------------------------
+
+show-profit is een functie die de winst, in de loop van een bepaald aantal dagen importeert (bijvoorbeeld: je wilt weten hoeveel winst de winkel heeft gemaakt in de afgelopen 10 dagen). De functie heeft 1 argument nodig: de hoeveelheid afgelopen dagen waarvan je de omzet van wilt weten 'days'.
+
+Voorbeeld: 
+INPUT: python main.py show-profit --days 10
+OUTPUT: The total profit over the last 10 days is "€216.5"
+
+-----------------------------------------------------------------------------------------------------------------
+
+show-product-amount is een functie die de hoeveelheid producten in de inventaris, in de loop van een bepaald aantal dagen importeert. De functie heeft 2 argumenten nodig: de hoeveelheid afgelopen dagen waarvan je de omzet van wilt weten 'days' en het 'product' waarvan je het wilt weten.
+
+Voorbeeld: 
+INPUT: python main.py show-product-amount --days 10 --product orange
+OUTPUT: The product "orange" has 399 units in stock
+
+-----------------------------------------------------------------------------------------------------------------
+
+show-product-inventory is een functie die alle data toont over een specifiek product, in de loop van een bepaald aantal dagen. De functie heeft 2 argumenten nodig: de hoeveelheid afgelopen dagen waarvan je de omzet van wilt weten 'days' en de naam van het product 'product'.
+
+Voorbeeld: 
+INPUT: python main.py show-product-inventory --days 10 --product orange
+OUTPUT: Een tabel met alle data wat te maken heeft met het product orange.
+
+-----------------------------------------------------------------------------------------------------------------
+
+show-sold-products is een functie die alle verkochte producten toont in een tabel, in de loop van een bepaald aantal dagen. De functie heeft 1 argument nodig: de hoeveelheid afgelopen dagen waarvan je de omzet van wilt weten 'days'.
+
+Voorbeeld: 
+INPUT: python main.py show-sold-products --days 10
+OUTPUT: Een tabel met alle data, van alle producten, die in de afgelopen 10 dagen zijn verkocht.
+
+-----------------------------------------------------------------------------------------------------------------
+
+advance-time is een functie die de huidige datum veranderd door middel van een hoeveelheid aantal dagen die jij wilt vooruitgaan/achteruitgaan. De functie heeft 1 argument nodig: de hoeveelheid dagen 'days' die jij vooruit (x) wilt gaan of de dagen die jij achteruit (-x) wilt gaan.
+
+Voorbeeld:
+INPUT: python main.py advance-time --days -20 (huidige datum is 2023-03-30)
+OUTPUT: 2023-03-10
+
+-----------------------------------------------------------------------------------------------------------------
+
+read-inventory is een functie die het hele inventaris toont in een tabel. De functie heeft geen argumenten nodig.
+
+Voorbeeld: 
+INPUT: python main.py read-inventory
+OUTPUT: Een tabel met alle data van de inventaris (bought.csv)
