@@ -18,12 +18,15 @@ __human_name__ = "superpy"
 base_path = os.getcwd()
 csv_path = os.path.join(base_path, 'csv')
 
+sold_path = os.path.join(csv_path, 'sold.csv')
+bought_path = os.path.join(csv_path, 'bought.csv')
+
 # get current dates
 current_date = date.today()
 
 # Inventory printen
 def read_inventory():
-    with open(rf'{csv_path}\bought.csv', 'r') as bought_file:
+    with open(bought_path, 'r') as bought_file:
         bougt_reader = csv.reader(bought_file)
 
         product_list = [['id','product_name','buy_price','amount','buy_date','experation_date']]
@@ -62,7 +65,7 @@ class Products():
 
     def buy_products(self, amount):
 
-        with open(rf'{csv_path}\bought.csv', 'r') as product_file:
+        with open(bought_path, 'r') as product_file:
             bought_reader = csv.reader(product_file)
 
             # for-loop om te kijken of er al een product in de csv-file zit die de zelfde naam EN koopdatum heeft.
@@ -76,7 +79,7 @@ class Products():
                     store_amount = row[3]
             id_count = row_count
 
-            with open(rf'{csv_path}\bought.csv', 'a', newline='') as bought_file:
+            with open(bought_path, 'a', newline='') as bought_file:
                 bought_writer = csv.writer(bought_file, delimiter=',')
                 line = []
 
@@ -113,8 +116,8 @@ class Products():
 
         # Functie om de inventory te updaten na dat een product is verkocht.
     def update_inventory(self, id, amount):
-        inventory_pd = pd.read_csv(rf'{csv_path}\bought.csv')
-        with open(rf'{csv_path}\bought.csv', 'r') as bought_file:
+        inventory_pd = pd.read_csv(bought_path)
+        with open(bought_path) as bought_file:
             bought_reader = csv.reader(bought_file)
 
             for row in bought_reader:
@@ -127,7 +130,7 @@ class Products():
         inventory_pd.to_csv(rf'{csv_path}\bought.csv', index=False)
     
     def sell_products(self, amount):
-        with open(rf'{csv_path}\bought.csv', 'r') as bought_file:
+        with open(bought_path, 'r') as bought_file:
             bought_reader = csv.reader(bought_file)
 
             # for-loop om te kijken of het product wat verkocht moet worden in bought.csv staat
@@ -146,7 +149,7 @@ class Products():
 
         bought_file.close()
 
-        with open(rf'{csv_path}\sold.csv', 'r') as sold_file:
+        with open(sold_path, 'r') as sold_file:
             sold_reader = csv.reader(sold_file)
 
             # Je kan niet een product verkopen die je als winkel niet hebt ingekocht. Dus als het product niet in bought.csv krijgt de console een error.
@@ -166,7 +169,7 @@ class Products():
 
         sold_file.close()
 
-        with open(rf'{csv_path}\sold.csv', 'a', newline='') as sold_file:
+        with open(sold_path, 'a', newline='') as sold_file:
             sold_writer = csv.writer(sold_file, delimiter=',')
             line = []
 

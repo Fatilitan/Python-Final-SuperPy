@@ -68,3 +68,4 @@ id,product_name,buy_price,amount,buy_date,experation_date
 67,orange,1.4,86,2023-03-28,2023-04-07
 68,beets,1.0,50,2023-03-28,2023-04-07
 69,orange,0.8,38,2023-03-29,2023-04-08
+70,orange,0.8,20,2023-04-18,2023-04-28

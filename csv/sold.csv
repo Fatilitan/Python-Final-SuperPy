@@ -69,3 +69,4 @@ id,bought_id,product_name,amount,sell_date,sell_price
 68,59,melon,24,2023-03-28,2.7
 69,53,banana,24,2023-03-28,0.73
 70,69,orange,22,2023-03-29,0.83
+71,70,orange,20,2023-04-18,0.83

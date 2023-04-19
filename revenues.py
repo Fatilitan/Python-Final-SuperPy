@@ -9,18 +9,34 @@ from rich.console import Console
 # File paths.
 base_path = os.getcwd()
 csv_path = os.path.join(base_path, 'csv')
+txt_path = os.path.join(base_path, 'txt')
 
-# get current dates
+sold_path = os.path.join(csv_path, 'sold.csv')
+bought_path = os.path.join(csv_path, 'bought.csv')
+date_txt_path = os.path.join(txt_path, 'date.txt')
+
+# get the current date
 current_date = date.today()
+
+# neem de datum vanuit de txt file
+def get_time():
+    with open(date_txt_path, 'r') as dates_file:
+        for lines in dates_file.readlines():
+            return lines
 
 # functie om de datum wat als "vandaag" gezien word te veranderen.
 def advance_time(days_amount):
-    new_date = current_date + timedelta(days_amount)
-    return print(new_date)
+    newest_date = get_time()
+    convert_date = datetime.strptime(str(newest_date), f'%Y-%m-%d').date()
+    new_date = convert_date + timedelta(days_amount)
+    with open(date_txt_path, 'w') as dates_file:
+        dates_file.write(str(new_date))
+        print(new_date)
+    return new_date
 
 # functie om de totale omzet van de afgelopen, ingevoerde dagen (days_amount) te krijgen.
 def get_revenue(days_amount):
-    with open(rf'{csv_path}\sold.csv', 'r') as sold_file:
+    with open(sold_path, 'r') as sold_file:
         sold_reader = csv.reader(sold_file)
 
         report_date = current_date - timedelta(days_amount)
@@ -41,7 +57,7 @@ def get_revenue(days_amount):
 
 # functie om de totale omzet per dag van de afgelopen, ingevoerde dagen (days_amount) te krijgen.
 def show_revenue(days_amount):
-    with open(rf'{csv_path}\sold.csv', 'r') as sold_file:
+    with open(sold_path, 'r') as sold_file:
         sold_reader = csv.reader(sold_file)
 
         report_date = current_date - timedelta(days_amount)
@@ -65,12 +81,12 @@ def show_revenue(days_amount):
         dates = list(date_and_revenue.keys())
         revenue = list(date_and_revenue.values())
         # x- & y-as plotten in de grafiek
-        plt.bar(dates, revenue)
+        plt.plot(dates, revenue)
         plt.show()
 
 # functie om de totale winst van de afgelopen, ingevoerde dagen (days_amount) te krijgen.
 def show_profit(days_amount):
-    with open(rf'{csv_path}\sold.csv', 'r') as sold_file:
+    with open(sold_path, 'r') as sold_file:
         sold_reader = csv.reader(sold_file)
 
         report_date = current_date - timedelta(days_amount)
@@ -91,7 +107,7 @@ def show_profit(days_amount):
 
 # functie die toont hoeveel producten er nog in de inventaris zitten van de afgelopen, ingevoerde dagen. Als het product overdatum is dan wordt het door de functie niet meegeteld. 
 def show_product_amount(product):
-    with open(rf'{csv_path}\bought.csv', 'r') as bought_file:
+    with open(bought_path, 'r') as bought_file:
         bougt_reader = csv.reader(bought_file)
 
         amount = 0
@@ -110,7 +126,7 @@ def show_product_amount(product):
 
 # functie die alle info over een product toont in de inventaris over de afgelopen, ingevoerde dagen.
 def show_product_inventory(days_amount, product):
-    with open(rf'{csv_path}\bought.csv', 'r') as bought_file:
+    with open(bought_path, 'r') as bought_file:
         bougt_reader = csv.reader(bought_file)
 
         report_date = current_date - timedelta(days_amount)
@@ -147,7 +163,7 @@ def show_product_inventory(days_amount, product):
 
 # functie die alle info over een product toont in de inventaris over de afgelopen, ingevoerde dagen.  
 def show_sold_products(days_amount):
-    with open(rf'{csv_path}\sold.csv', 'r') as sold_file:
+    with open(sold_path, 'r') as sold_file:
         sold_reader = csv.reader(sold_file)
 
         report_date = current_date - timedelta(days_amount)

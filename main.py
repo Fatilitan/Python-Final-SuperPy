@@ -9,7 +9,6 @@ __winc_id__ = "a2bc36ea784242e4989deb157d527ba0"
 __human_name__ = "superpy"
 
 def main():
-
     # Een global parser maken & een subparser
     global_parser = argparse.ArgumentParser(prog="superpy")
     subparsers = global_parser.add_subparsers(
